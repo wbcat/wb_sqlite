@@ -1,0 +1,13 @@
+edition = "2021"
+hard_tabs = true
+newline_style = "Unix"
+tab_spaces = 3
+use_field_init_shorthand = true
+use_try_shorthand = true
+
+# Unstable features
+#unstable_features = true
+#version = "Two"
+#imports_granularity = "Crate"
+#reorder_impl_items = true
+#group_imports = "StdExternalCrate"
