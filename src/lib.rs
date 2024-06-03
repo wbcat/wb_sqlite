@@ -169,22 +169,6 @@ pub fn create_table(input: TokenStream) -> TokenStream {
 	create_table::inner(input).unwrap_or_else(|e| e.into_token_stream())
 }
 
-// Get SQLite column datatype from given rust type-string.
-fn col_typ(rust_typ: &str) -> &'static str {
-	match rust_typ {
-		"bool" | "u8" | "u16" | "u32" | "i8" | "i16" | "i32" | "i64" => "INTEGER NOT NULL",
-		"f32" | "f64" => "REAL NOT NULL",
-		"&str" | "String" => "TEXT NOT NULL",
-		"&[u8]" | "Vec<u8>" => "BLOB NOT NULL",
-		"Option<bool>" | "Option<u8>" | "Option<u16>" | "Option<u32>" | "Option<i8>"
-		| "Option<i16>" | "Option<i32>" | "Option<i64>" => "INTEGER",
-		"Option<f32>" | "Option<f64>" => "REAL",
-		"Option<String>" => "TEXT",
-		"Option<Vec<u8>>" => "BLOB",
-		_ => "ANY",
-	}
-}
-
 /// const CREATE_TABLE_LOG_SQL: &'static str = "CREATE ..."
 ///
 /// Create logging-table + trigger to log all table row modifications to the logging-table.

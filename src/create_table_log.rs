@@ -46,7 +46,7 @@ fn gen_struct(
 		log_values.push_str(&col_name);
 		col_defs.push(' ');
 		if col_attr.typ.is_empty() {
-			col_defs.push_str(crate::col_typ(&uf.type_string()));
+			col_defs.push_str(crate::util::col_typ(&uf.type_string()));
 		} else {
 			col_defs.push_str(&col_attr.typ);
 		}
