@@ -3,7 +3,8 @@ name = "wb_sqlite"
 version = "0.1.2"
 authors = ["Werner Braun <wbcat@braun-echle.de>"]
 edition = "2021"
-#rust-version = "1.78"
+# sqlx-core needs 1.74 impl_trait_projections
+rust-version = "1.74"
 description = "Derive map of struct/field to SQLite table/column. Generate const/fn for create-table, insert, select, update."
 repository = "https://github.com/wbcat/wb_sqlite"
 license = "MIT OR Apache-2.0"
