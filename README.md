@@ -19,8 +19,7 @@ All derived items are saved to `target/generated/wb_sqlite` thanks to [virtue](h
 
 ### Create table
 ```rust
-# use wb_sqlite::CreateTableSql;
-#[derive(CreateTableSql)]
+#[derive(wb_sqlite::CreateTableSql)]
 struct Dog {
 	name: String,
 }
@@ -28,13 +27,13 @@ assert_eq!(
 	Dog::CREATE_TABLE_SQL,
 	"CREATE TABLE IF NOT EXISTS dog (name TEXT NOT NULL) STRICT;"
 );
-# assert!(rusqlite::Connection::open_in_memory().unwrap().execute_batch(Dog::CREATE_TABLE_SQL).is_ok())
+assert!(rusqlite::Connection::open_in_memory().unwrap()
+	.execute_batch(Dog::CREATE_TABLE_SQL).is_ok())
 ```
 
 column constraint
 ```rust
-# use wb_sqlite::CreateTableSql;
-#[derive(CreateTableSql)]
+#[derive(wb_sqlite::CreateTableSql)]
 struct Cat {
 	#[sql(constraint = "UNIQUE")]
 	name: String,
@@ -42,15 +41,18 @@ struct Cat {
 }
 assert_eq!(
 	Cat::CREATE_TABLE_SQL,
-	"CREATE TABLE IF NOT EXISTS cat (name TEXT NOT NULL UNIQUE, weight REAL) STRICT;"
+	concat!(
+	"CREATE TABLE IF NOT EXISTS cat ",
+	"(name TEXT NOT NULL UNIQUE, weight REAL) STRICT;"
+	)
 );
-# assert!(rusqlite::Connection::open_in_memory().unwrap().execute_batch(Cat::CREATE_TABLE_SQL).is_ok())
+assert!(rusqlite::Connection::open_in_memory().unwrap()
+	.execute_batch(Cat::CREATE_TABLE_SQL).is_ok())
 ```
 
 column datatype override
 ```rust
-# use wb_sqlite::CreateTableSql;
-#[derive(CreateTableSql)]
+#[derive(wb_sqlite::CreateTableSql)]
 struct Human {
 	#[sql(constraint = "PRIMARY KEY")]
 	id: i64,
@@ -63,17 +65,19 @@ struct Human {
 assert_eq!(
 	Human::CREATE_TABLE_SQL,
 	concat!(
-	"CREATE TABLE IF NOT EXISTS human (id INTEGER NOT NULL PRIMARY KEY, ",
-	"name TEXT NOT NULL CHECK(name != ''), image BLOB, data ANY) STRICT;"
+	"CREATE TABLE IF NOT EXISTS human (",
+	"id INTEGER NOT NULL PRIMARY KEY, ",
+	"name TEXT NOT NULL CHECK(name != ''), ",
+	"image BLOB, data ANY) STRICT;"
 	)
 );
-# assert!(rusqlite::Connection::open_in_memory().unwrap().execute_batch(Human::CREATE_TABLE_SQL).is_ok())
+assert!(rusqlite::Connection::open_in_memory().unwrap()
+	.execute_batch(Human::CREATE_TABLE_SQL).is_ok())
 ```
 
 table constraint
 ```rust
-# use wb_sqlite::CreateTableSql;
-#[derive(CreateTableSql)]
+#[derive(wb_sqlite::CreateTableSql)]
 #[sql(constraint = "UNIQUE(owner,name)")]
 struct Pet {
 	#[sql(constraint = "PRIMARY KEY")]
@@ -90,7 +94,8 @@ assert_eq!(
 	"name TEXT NOT NULL, UNIQUE(owner,name)) STRICT;"
 	)
 );
-# assert!(rusqlite::Connection::open_in_memory().unwrap().execute_batch(Pet::CREATE_TABLE_SQL).is_ok())
+assert!(rusqlite::Connection::open_in_memory().unwrap()
+	.execute_batch(Pet::CREATE_TABLE_SQL).is_ok())
 ```
 
 
@@ -98,7 +103,7 @@ assert_eq!(
 
 sync rusqlite
 ```rust
-# use wb_sqlite::{CreateTableSql,InsertSync,UpdateSync};
+use wb_sqlite::{CreateTableSql,InsertSync,UpdateSync};
 #[derive(CreateTableSql,InsertSync,UpdateSync)]
 struct Person {
 	#[sql(constraint = "PRIMARY KEY")]
@@ -116,13 +121,13 @@ fn main() -> Result<(), rusqlite::Error> {
 		name: "me".to_owned(),
 	};
 	let id = p.insert_sync(&conn)?;
-	assert!(id > 0);
+	assert!(id == 1);
 
-	let p2 = Person {
-		id: id,
+	let p = Person {
+		id: 1,
 		name: "you".to_owned()
 	};
-	let ok = p2.update_sync(&conn)?;
+	let ok = p.update_sync(&conn)?;
 	assert!(ok);
 
 	Ok(())
@@ -131,7 +136,7 @@ fn main() -> Result<(), rusqlite::Error> {
 
 async sqlx
 ```rust
-# use wb_sqlite::{CreateTableSql,Get,Insert,Update};
+use wb_sqlite::{CreateTableSql,Get,Insert,Update};
 #[derive(CreateTableSql,Get,Insert,Update,sqlx::FromRow)]
 struct Person {
 	#[sql(constraint = "PRIMARY KEY")]
@@ -151,20 +156,20 @@ async fn main() -> Result<(), sqlx::Error> {
 		name: "me".to_owned(),
 	};
 	let id = p.insert(&mut conn).await?;
-	assert!(id > 0);
+	assert!(id == 1);
 
-	let p2 = Person {
-		id: id,
+	let p = Person {
+		id: 1,
 		name: "you".to_owned()
 	};
-	let ok = p2.update(&mut conn).await?;
+	let ok = p.update(&mut conn).await?;
 	assert!(ok);
 
-	let p3 = Person::get_by_id(1,&mut conn).await?;
-	assert_eq!(p3.name,"you");
+	let p = Person::get_by_id(1,&mut conn).await?;
+	assert_eq!(p.name,"you");
 
-	let p4 = Person::get_by_name("you",&mut conn).await?;
-	assert_eq!(p4.id,1);
+	let p = Person::get_by_name("you",&mut conn).await?;
+	assert_eq!(p.id,1);
 
 	Ok(())
 }
