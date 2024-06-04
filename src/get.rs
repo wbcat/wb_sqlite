@@ -56,9 +56,10 @@ fn gen_struct(
 	}
 	columns.pop(); // get rid of the last ','
 
-	let mut gen_impl = generator.generate_impl();
-	if !pk.is_empty() {
-		gen_impl
+	if !pk.is_empty() || !unique.is_empty() {
+		let mut gen_impl = generator.generate_impl();
+		if !pk.is_empty() {
+			gen_impl
 			.generate_fn(&format!("get_by_{pk}"))
 			.as_async()
 			.with_arg(&pk, &pk_typ)
@@ -77,23 +78,24 @@ fn gen_struct(
 				fn_body.push_parsed(s)?;
 				Ok(())
 			})?;
-	}
-	if !unique.is_empty() {
-		unique.pop();
-		unique_typ.pop();
-		for (col, typ) in std::iter::zip(unique.split(','), unique_typ.split(',')) {
-			gen_impl
-				.generate_fn(&format!("get_by_{col}"))
-				.as_async()
-				.with_arg(col, typ)
-				.with_arg("exec", "impl ::sqlx::SqliteExecutor<'_>")
-				.with_return_type("Result<Self, ::sqlx::Error>")
-				.make_pub()
-				.body(|fn_body| {
-					let s = format!("::sqlx::query_as::<_, Self>(\"SELECT {columns} FROM {tab_name} WHERE {col}=?\").bind({col}).fetch_one(exec).await");
-					fn_body.push_parsed(s)?;
-					Ok(())
-				})?;
+		}
+		if !unique.is_empty() {
+			unique.pop();
+			unique_typ.pop();
+			for (col, typ) in std::iter::zip(unique.split(','), unique_typ.split(',')) {
+				gen_impl
+			.generate_fn(&format!("get_by_{col}"))
+			.as_async()
+			.with_arg(col, typ)
+			.with_arg("exec", "impl ::sqlx::SqliteExecutor<'_>")
+			.with_return_type("Result<Self, ::sqlx::Error>")
+			.make_pub()
+			.body(|fn_body| {
+				let s = format!("::sqlx::query_as::<_, Self>(\"SELECT {columns} FROM {tab_name} WHERE {col}=?\").bind({col}).fetch_one(exec).await");
+				fn_body.push_parsed(s)?;
+				Ok(())
+			})?;
+			}
 		}
 	}
 	Ok(())

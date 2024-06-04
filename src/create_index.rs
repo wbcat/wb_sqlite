@@ -33,7 +33,7 @@ fn gen_struct(
 		if col_attr.constraint.starts_with("REFERENCES ") {
 			let col_name = ident.to_string();
 			create_index.push_str(&format!(
-				"CREATE INDEX IF NOT EXISTS {tab_name}_{col_name}_idx ON {tab_name}({col_name});"
+				"CREATE INDEX IF NOT EXISTS {tab_name}_{col_name}_idx ON {tab_name}({col_name}); "
 			));
 		}
 	}

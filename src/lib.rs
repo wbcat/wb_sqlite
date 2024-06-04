@@ -35,8 +35,8 @@ use virtue::prelude::TokenStream;
 /// assert_eq!(
 ///    Cat::CREATE_INDEX_SQL,
 ///    concat!(
-///    "CREATE INDEX IF NOT EXISTS cat_mother_idx ON cat(mother);",
-///    "CREATE INDEX IF NOT EXISTS cat_owner_idx ON cat(owner);"
+///    "CREATE INDEX IF NOT EXISTS cat_mother_idx ON cat(mother); ",
+///    "CREATE INDEX IF NOT EXISTS cat_owner_idx ON cat(owner); "
 ///    )
 /// );
 /// ```
