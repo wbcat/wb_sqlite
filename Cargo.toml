@@ -1,6 +1,6 @@
 [package]
 name = "wb_sqlite"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["Werner Braun <wbcat@braun-echle.de>"]
 edition = "2021"
 # sqlx-core needs 1.74 impl_trait_projections

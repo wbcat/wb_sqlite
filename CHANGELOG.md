@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## Unreleased
 
-- tests enhanced
+## 0.1.3 - 2024-07-05
+
+- tests extended
 - MSRV 1.74
 - bump virtue to 0.0.17
 - small refactorings after extended lint checks
