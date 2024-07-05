@@ -3,7 +3,7 @@ use virtue::{
 	prelude::{Body, Fields, Generator, Parse, Result, TokenStream},
 };
 
-pub fn inner(input: TokenStream) -> Result<TokenStream> {
+pub(crate) fn inner(input: TokenStream) -> Result<TokenStream> {
 	let parse = Parse::new(input)?;
 	let (mut generator, attributes, body) = parse.into_generator();
 	match body {

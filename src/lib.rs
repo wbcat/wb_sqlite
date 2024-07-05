@@ -42,7 +42,7 @@ use virtue::prelude::TokenStream;
 /// ```
 #[proc_macro_derive(CreateIndexSql, attributes(sql))]
 pub fn create_index(input: TokenStream) -> TokenStream {
-	create_index::inner(input).unwrap_or_else(|e| e.into_token_stream())
+	create_index::inner(input).unwrap_or_else(virtue::Error::into_token_stream)
 }
 
 /// const CREATE_TABLE_SQL: &'static str = "CREATE TABLE ..."
@@ -166,7 +166,7 @@ pub fn create_index(input: TokenStream) -> TokenStream {
 /// `ANY              = all other`
 #[proc_macro_derive(CreateTableSql, attributes(sql))]
 pub fn create_table(input: TokenStream) -> TokenStream {
-	create_table::inner(input).unwrap_or_else(|e| e.into_token_stream())
+	create_table::inner(input).unwrap_or_else(virtue::Error::into_token_stream)
 }
 
 /// const CREATE_TABLE_LOG_SQL: &'static str = "CREATE ..."
@@ -195,7 +195,7 @@ pub fn create_table(input: TokenStream) -> TokenStream {
 /// ```
 #[proc_macro_derive(CreateTableLogSql, attributes(sql))]
 pub fn create_table_log(input: TokenStream) -> TokenStream {
-	create_table_log::inner(input).unwrap_or_else(|e| e.into_token_stream())
+	create_table_log::inner(input).unwrap_or_else(virtue::Error::into_token_stream)
 }
 
 /// const SELECT_SQL : &'static str = "SELECT ..."
@@ -220,7 +220,7 @@ pub fn create_table_log(input: TokenStream) -> TokenStream {
 /// ```
 #[proc_macro_derive(SelectSql, attributes(sql))]
 pub fn select(input: TokenStream) -> TokenStream {
-	select::inner(input).unwrap_or_else(|e| e.into_token_stream())
+	select::inner(input).unwrap_or_else(virtue::Error::into_token_stream)
 }
 
 /// const SELECT_AS_SQL : &'static str = "SELECT ..."
@@ -260,7 +260,7 @@ pub fn select(input: TokenStream) -> TokenStream {
 /// ```
 #[proc_macro_derive(SelectAsSql, attributes(sqlas))]
 pub fn select_as(input: TokenStream) -> TokenStream {
-	select_as::inner(input).unwrap_or_else(|e| e.into_token_stream())
+	select_as::inner(input).unwrap_or_else(virtue::Error::into_token_stream)
 }
 
 /// fn get_by_{field-name}({field-name}: {field-type}, exec: impl sqlx::SqliteExecutor<'_ >) -> Result<Self, sqlx::Error>
@@ -306,7 +306,7 @@ pub fn select_as(input: TokenStream) -> TokenStream {
 /// ```
 #[proc_macro_derive(Get, attributes(sql))]
 pub fn get(input: TokenStream) -> TokenStream {
-	get::inner(input).unwrap_or_else(|e| e.into_token_stream())
+	get::inner(input).unwrap_or_else(virtue::Error::into_token_stream)
 }
 
 /// fn insert(&self, exec: impl sqlx::SqliteExecutor<'_ >) -> Result<i64, sqlx::Error>
@@ -347,7 +347,7 @@ pub fn get(input: TokenStream) -> TokenStream {
 /// ```
 #[proc_macro_derive(Insert, attributes(sql))]
 pub fn insert(input: TokenStream) -> TokenStream {
-	insert::inner(input).unwrap_or_else(|e| e.into_token_stream())
+	insert::inner(input).unwrap_or_else(virtue::Error::into_token_stream)
 }
 
 /// fn insert_sync(&self, conn: &rusqlite::Connection) -> Result<i64, rusqlite::Error>
@@ -386,7 +386,7 @@ pub fn insert(input: TokenStream) -> TokenStream {
 /// ```
 #[proc_macro_derive(InsertSync, attributes(sql))]
 pub fn insert_sync(input: TokenStream) -> TokenStream {
-	insert_sync::inner(input).unwrap_or_else(|e| e.into_token_stream())
+	insert_sync::inner(input).unwrap_or_else(virtue::Error::into_token_stream)
 }
 
 /// fn update(&self, exec: impl sqlx::SqliteExecutor<'_ >) -> Result<bool, sqlx::Error>
@@ -429,7 +429,7 @@ pub fn insert_sync(input: TokenStream) -> TokenStream {
 /// ```
 #[proc_macro_derive(Update, attributes(sql))]
 pub fn update(input: TokenStream) -> TokenStream {
-	update::inner(input).unwrap_or_else(|e| e.into_token_stream())
+	update::inner(input).unwrap_or_else(virtue::Error::into_token_stream)
 }
 
 /// fn update_sync(&self, conn: &rusqlite::Connection) -> Result<bool, rusqlite::Error>
@@ -470,5 +470,5 @@ pub fn update(input: TokenStream) -> TokenStream {
 /// ```
 #[proc_macro_derive(UpdateSync, attributes(sql))]
 pub fn update_sync(input: TokenStream) -> TokenStream {
-	update_sync::inner(input).unwrap_or_else(|e| e.into_token_stream())
+	update_sync::inner(input).unwrap_or_else(virtue::Error::into_token_stream)
 }

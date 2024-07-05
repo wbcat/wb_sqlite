@@ -7,7 +7,7 @@ use virtue::{
 /// Convert TypeName (Pascal) to table_name (Snake)
 ///
 /// <https://github.com/rust-lang/rfcs/blob/master/text/0430-finalizing-naming-conventions.md>
-pub fn tab_name(ident: &str) -> String {
+pub(crate) fn tab_name(ident: &str) -> String {
 	ident
 		.from_case(Case::Pascal)
 		.without_boundaries(&[
@@ -19,7 +19,7 @@ pub fn tab_name(ident: &str) -> String {
 }
 
 /// Get SQLite column datatype from given rust type-string.
-pub fn col_typ(rust_typ: &str) -> &'static str {
+pub(crate) fn col_typ(rust_typ: &str) -> &'static str {
 	match rust_typ {
 		"bool" | "u8" | "u16" | "u32" | "i8" | "i16" | "i32" | "i64" => "INTEGER NOT NULL",
 		"f32" | "f64" => "REAL NOT NULL",
@@ -35,9 +35,9 @@ pub fn col_typ(rust_typ: &str) -> &'static str {
 }
 
 #[derive(Debug, Default)]
-pub struct TabAttr {
-	pub constraint: String, // table-constraint(s)
-	pub option: String,     // table-option other than STRICT
+pub(crate) struct TabAttr {
+	pub(crate) constraint: String, // table-constraint(s)
+	pub(crate) option: String,     // table-option other than STRICT
 }
 
 impl FromAttribute for TabAttr {
@@ -64,9 +64,9 @@ impl FromAttribute for TabAttr {
 }
 
 #[derive(Debug, Default)]
-pub struct ColAttr {
-	pub typ: String,        // type-name
-	pub constraint: String, // column-constraint
+pub(crate) struct ColAttr {
+	pub(crate) typ: String,        // type-name
+	pub(crate) constraint: String, // column-constraint
 }
 
 impl FromAttribute for ColAttr {
@@ -93,8 +93,8 @@ impl FromAttribute for ColAttr {
 }
 
 #[derive(Debug, Default)]
-pub struct AsTabAttr {
-	pub from: String, // SelectAs from value
+pub(crate) struct AsTabAttr {
+	pub(crate) from: String, // SelectAs from value
 }
 
 impl FromAttribute for AsTabAttr {
@@ -120,8 +120,8 @@ impl FromAttribute for AsTabAttr {
 }
 
 #[derive(Debug, Default)]
-pub struct AsColAttr {
-	pub col: String, // SelectAs original column name
+pub(crate) struct AsColAttr {
+	pub(crate) col: String, // SelectAs original column name
 }
 
 impl FromAttribute for AsColAttr {
