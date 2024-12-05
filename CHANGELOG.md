@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## Unreleased
 
+## 0.1.4 - 2024-12-05
+
+- MSRV 1.81
+- bump virtue to 0.0.18
+- bump dev dependencies
+- small refactorings after extended lint checks
+- doc fixed typo + assertion
+
 ## 0.1.3 - 2024-07-05
 
 - tests extended

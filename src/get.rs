@@ -60,7 +60,7 @@ fn gen_struct(
 		let mut gen_impl = generator.generate_impl();
 		if !pk.is_empty() {
 			gen_impl
-			.generate_fn(&format!("get_by_{pk}"))
+			.generate_fn(format!("get_by_{pk}"))
 			.as_async()
 			.with_arg(&pk, &pk_typ)
 			.with_arg("exec", "impl ::sqlx::SqliteExecutor<'_>")
@@ -84,7 +84,7 @@ fn gen_struct(
 			unique_typ.pop();
 			for (col, typ) in std::iter::zip(unique.split(','), unique_typ.split(',')) {
 				gen_impl
-			.generate_fn(&format!("get_by_{col}"))
+			.generate_fn(format!("get_by_{col}"))
 			.as_async()
 			.with_arg(col, typ)
 			.with_arg("exec", "impl ::sqlx::SqliteExecutor<'_>")
