@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project adheres to [Semantic Versioning](https://semver.org).
 
-## Unreleased
+## 0.2.0 - 2025-02-01
+
+- do not generate const + fn for empty structs (aka Unit-Struct)
+- handle edge case struct (insert) with a single column (pk)
+- bump to convert_case 0.7.1, sqlx 0.8.3, tokio 1.43.0
+- more tests
+- doc small enhancements
 
 ## 0.1.4 - 2024-12-05
 

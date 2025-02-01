@@ -11,9 +11,9 @@ pub(crate) fn tab_name(ident: &str) -> String {
 	ident
 		.from_case(Case::Pascal)
 		.without_boundaries(&[
-			Boundary::UpperDigit,
-			Boundary::DigitLower,
-			Boundary::LowerDigit,
+			Boundary::UPPER_DIGIT,
+			Boundary::DIGIT_LOWER,
+			Boundary::LOWER_DIGIT,
 		])
 		.to_case(Case::Snake)
 }
@@ -153,5 +153,35 @@ fn literal_str(val: Literal) -> Result<String> {
 		Ok(val_string[1..val_string.len() - 1].to_string())
 	} else {
 		Err(Error::custom_at("should be a literal str", val.span()))
+	}
+}
+
+#[cfg(test)]
+mod tests {
+
+	#[test]
+	fn tab_name() {
+		fn t(id: &str, tn: &str) {
+			assert_eq!(tn, super::tab_name(id))
+		}
+		// Edge-Cases
+		t("", "");
+		t("Record", "record");
+		t("invalidType", "invalid_type");
+		// LowerUpper
+		t("MyRecord", "my_record");
+		t("MyLongRecord", "my_long_record");
+		// DigitUpper
+		t("Digit2Upper", "digit2_upper");
+		t("Digit2Upper3", "digit2_upper3");
+		t("Digit2Upper4Long", "digit2_upper4_long");
+		// UpperDigit
+		t("U5Tab", "u5_tab");
+		// DigitLower
+		t("T5loName", "t5lo_name");
+		// LowerDigit
+		t("No6Today", "no6_today");
+		// Acronym
+		t("HTTPRequest", "http_request");
 	}
 }

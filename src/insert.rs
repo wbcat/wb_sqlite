@@ -63,28 +63,38 @@ fn gen_struct(
 		s
 	}
 
-	generator
-		.generate_impl()
-		.generate_fn("insert")
-		.as_async()
-		.with_self_arg(FnSelfArg::RefSelf)
-		.with_arg("exec", "impl ::sqlx::SqliteExecutor<'_>")
-		.with_return_type("Result<i64, ::sqlx::Error>")
-		.make_pub()
-		.body(|fn_body| {
-			let mut s = String::new();
-			if pk.is_empty() || pk_typ != "i64" {
-				let q = query(&tab_name, &columns_full, &values_full);
-				s.push_str(&format!("let rowid = {q}; Ok(rowid)"));
-			} else {
-				s.push_str(&format!("let rowid = if self.{pk} > 0 {{"));
-				s.push_str(&query(&tab_name, &columns_full, &values_full));
-				s.push_str("} else {");
-				s.push_str(&query(&tab_name, &columns, &values));
-				s.push_str("}; Ok(rowid)");
-			}
-			fn_body.push_parsed(s)?;
-			Ok(())
-		})?;
+	if !columns_full.is_empty() {
+		generator
+			.generate_impl()
+			.generate_fn("insert")
+			.as_async()
+			.with_self_arg(FnSelfArg::RefSelf)
+			.with_arg("exec", "impl ::sqlx::SqliteExecutor<'_>")
+			.with_return_type("Result<i64, ::sqlx::Error>")
+			.make_pub()
+			.body(|fn_body| {
+				let mut s = String::new();
+				if pk.is_empty() || pk_typ != "i64" {
+					let q = query(&tab_name, &columns_full, &values_full);
+					s.push_str(&format!("let rowid = {q}; Ok(rowid)"));
+				} else {
+					s.push_str(&format!("let rowid = if self.{pk} > 0 {{"));
+					s.push_str(&query(&tab_name, &columns_full, &values_full));
+					s.push_str("} else {");
+					if columns.is_empty() {
+						// the table has only the pk column
+						s.push_str(&format!(
+							"::sqlx::query(\"INSERT INTO {tab_name} VALUES (NULL)\").execute(exec).await?.last_insert_rowid()"
+						));
+					} else {
+						s.push_str(&query(&tab_name, &columns, &values));
+					}
+					s.push_str("}; Ok(rowid)");
+				}
+				fn_body.push_parsed(s)?;
+				Ok(())
+			})?;
+	}
+
 	Ok(())
 }

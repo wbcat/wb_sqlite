@@ -57,7 +57,8 @@ fn gen_struct(
 		}
 	}
 
-	generator
+	if !col_defs.is_empty() {
+		generator
 		.generate_impl()
 		.generate_const("CREATE_TABLE_LOG_SQL", "&'static str")
 		.make_pub()
@@ -67,5 +68,7 @@ fn gen_struct(
 			))?;
 			Ok(())
 		})?;
+	}
+
 	Ok(())
 }

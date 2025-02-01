@@ -1,4 +1,4 @@
-# Rust 1.83
+# Rust 1.84
 # https://crates.io/crates/cargo-cranky
 # https://doc.rust-lang.org/rustc/lints/listing/allowed-by-default.html
 # https://rust-lang.github.io/rust-clippy/master/
@@ -110,6 +110,7 @@ warn = [
 	"clippy::many_single_char_names",
 	"clippy::map_err_ignore",
 	"clippy::map_unwrap_or",
+	"clippy::map_with_unused_argument_over_ranges",
 	"clippy::match_bool",
 	"clippy::match_same_arms",
 	"clippy::match_wild_err_arm",
@@ -185,6 +186,7 @@ warn = [
 	"clippy::uninlined_format_args",
 	"clippy::unnecessary_box_returns",
 	"clippy::unnecessary_join",
+	"clippy::unnecessary_literal_bound",
 	"clippy::unnecessary_self_imports",
 	"clippy::unnecessary_struct_initialization",
 	"clippy::unnecessary_wraps",

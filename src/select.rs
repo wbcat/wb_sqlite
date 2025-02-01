@@ -31,13 +31,16 @@ fn gen_struct(
 	}
 	columns.pop(); // get rid of the last ','
 
-	generator
-		.generate_impl()
-		.generate_const("SELECT_SQL", "&'static str")
-		.make_pub()
-		.with_value(|b| {
-			b.push_parsed(format!("\"SELECT {columns} FROM {tab_name}\""))?;
-			Ok(())
-		})?;
+	if !columns.is_empty() {
+		generator
+			.generate_impl()
+			.generate_const("SELECT_SQL", "&'static str")
+			.make_pub()
+			.with_value(|b| {
+				b.push_parsed(format!("\"SELECT {columns} FROM {tab_name}\""))?;
+				Ok(())
+			})?;
+	}
+
 	Ok(())
 }

@@ -27,7 +27,8 @@ use virtue::prelude::TokenStream;
 ///    name: String,
 ///    #[sql(constraint = "REFERENCES parent(id) ON UPDATE RESTRICT ON DELETE RESTRICT")]
 ///    mother: i64,
-///    #[sql(constraint = "REFERENCES parent(id) ON UPDATE RESTRICT ON DELETE RESTRICT")]
+///    // lowercase first char prevents generation
+///    #[sql(constraint = "rEFERENCES parent(id) ON UPDATE RESTRICT ON DELETE RESTRICT")]
 ///    father: i64,
 ///    #[sql(constraint = "REFERENCES human(id) ON UPDATE RESTRICT ON DELETE RESTRICT")]
 ///    owner: i64,
@@ -36,7 +37,6 @@ use virtue::prelude::TokenStream;
 ///    Cat::CREATE_INDEX_SQL,
 ///    concat!(
 ///    "CREATE INDEX IF NOT EXISTS cat_mother_idx ON cat(mother); ",
-///    "CREATE INDEX IF NOT EXISTS cat_father_idx ON cat(father); ",
 ///    "CREATE INDEX IF NOT EXISTS cat_owner_idx ON cat(owner); "
 ///    )
 /// );
@@ -232,9 +232,13 @@ pub fn select(input: TokenStream) -> TokenStream {
 ///
 /// #[sqlas(from = "[select stmt after from](https://www.sqlite.org/lang_select.html)")]
 ///
+/// if omitted defaults to {tab_name}
+///
 /// ## Field attributes
 ///
-/// #[sql(col = "result column")]
+/// #[sqlas(col = "result column")]
+///
+/// if ommited defaults to {col_name}
 ///
 /// ```rust
 /// # use wb_sqlite::SelectAsSql;

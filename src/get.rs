@@ -56,7 +56,7 @@ fn gen_struct(
 	}
 	columns.pop(); // get rid of the last ','
 
-	if !pk.is_empty() || !unique.is_empty() {
+	if !(pk.is_empty() && unique.is_empty()) {
 		let mut gen_impl = generator.generate_impl();
 		if !pk.is_empty() {
 			gen_impl

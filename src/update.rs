@@ -56,7 +56,7 @@ fn gen_struct(
 		s
 	}
 
-	if !pk.is_empty() {
+	if !(pk.is_empty() || columns.is_empty()) {
 		generator
 			.generate_impl()
 			.generate_fn("update")
@@ -74,5 +74,6 @@ fn gen_struct(
 				Ok(())
 			})?;
 	}
+
 	Ok(())
 }

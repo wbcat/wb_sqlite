@@ -59,15 +59,18 @@ fn gen_struct(
 		}
 	}
 
-	generator
-		.generate_impl()
-		.generate_const("CREATE_TABLE_SQL", "&'static str")
-		.make_pub()
-		.with_value(|b| {
-			b.push_parsed(format!(
+	if !col_defs.is_empty() {
+		generator
+			.generate_impl()
+			.generate_const("CREATE_TABLE_SQL", "&'static str")
+			.make_pub()
+			.with_value(|b| {
+				b.push_parsed(format!(
 				"\"CREATE TABLE IF NOT EXISTS {tab_name} ({col_defs}{tab_constraint}) STRICT{tab_option};\""
 			))?;
-			Ok(())
-		})?;
+				Ok(())
+			})?;
+	}
+
 	Ok(())
 }

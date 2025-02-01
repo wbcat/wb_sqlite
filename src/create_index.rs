@@ -38,13 +38,16 @@ fn gen_struct(
 		}
 	}
 
-	generator
-		.generate_impl()
-		.generate_const("CREATE_INDEX_SQL", "&'static str")
-		.make_pub()
-		.with_value(|b| {
-			b.push_parsed(format!("\"{create_index}\""))?;
-			Ok(())
-		})?;
+	if !create_index.is_empty() {
+		generator
+			.generate_impl()
+			.generate_const("CREATE_INDEX_SQL", "&'static str")
+			.make_pub()
+			.with_value(|b| {
+				b.push_parsed(format!("\"{create_index}\""))?;
+				Ok(())
+			})?;
+	}
+
 	Ok(())
 }
