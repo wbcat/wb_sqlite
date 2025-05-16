@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project adheres to [Semantic Versioning](https://semver.org).
 
+## 0.2.1 - 2025-05-16
+
+- bump convert_case 0.8.0, sqlx 0.8.5, tokio 1.45.0
+
 ## 0.2.0 - 2025-02-01
 
 - do not generate const + fn for empty structs (aka Unit-Struct)

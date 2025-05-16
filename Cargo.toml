@@ -1,10 +1,10 @@
 [package]
 name = "wb_sqlite"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Werner Braun <wbcat@braun-echle.de>"]
 edition = "2021"
-# idna 1.0.3 needs 1.81 error in core
-rust-version = "1.81"
+# sqlx 0.8.5 needs 1.82
+rust-version = "1.82"
 description = "Derive map of struct/field to SQLite table/column. Generate const/fn for create-table, insert, select, update."
 repository = "https://github.com/wbcat/wb_sqlite"
 license = "MIT OR Apache-2.0"
@@ -15,11 +15,11 @@ categories = ["database"]
 proc-macro = true
 
 [dependencies]
-convert_case = "0.7.1"
+convert_case = "0.8.0"
 virtue = "0.0.18"
 
 [dev-dependencies]
-# sqlx 0.8.3 needs rusqlite 0.32.1
+# sqlx 0.8.5 needs rusqlite 0.32.1
 rusqlite = { version = "0.32.1", features = ["bundled"] }
-sqlx = { version = "0.8.3", features = ["sqlite", "runtime-tokio"] }
-tokio = { version = "1.43.0", features = ["rt", "macros"] }
+sqlx = { version = "0.8.5", features = ["sqlite", "runtime-tokio"] }
+tokio = { version = "1.45.0", features = ["rt", "macros"] }

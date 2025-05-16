@@ -21,12 +21,12 @@ pub(crate) fn tab_name(ident: &str) -> String {
 /// Get SQLite column datatype from given rust type-string.
 pub(crate) fn col_typ(rust_typ: &str) -> &'static str {
 	match rust_typ {
-		"bool" | "u8" | "u16" | "u32" | "i8" | "i16" | "i32" | "i64" => "INTEGER NOT NULL",
+		"bool" | "i8" | "i16" | "i32" | "i64" | "u8" | "u16" | "u32" => "INTEGER NOT NULL",
 		"f32" | "f64" => "REAL NOT NULL",
 		"&str" | "String" => "TEXT NOT NULL",
 		"&[u8]" | "Vec<u8>" => "BLOB NOT NULL",
-		"Option<bool>" | "Option<u8>" | "Option<u16>" | "Option<u32>" | "Option<i8>"
-		| "Option<i16>" | "Option<i32>" | "Option<i64>" => "INTEGER",
+		"Option<bool>" | "Option<i8>" | "Option<i16>" | "Option<i32>" | "Option<i64>"
+		| "Option<u8>" | "Option<u16>" | "Option<u32>" => "INTEGER",
 		"Option<f32>" | "Option<f64>" => "REAL",
 		"Option<String>" => "TEXT",
 		"Option<Vec<u8>>" => "BLOB",
