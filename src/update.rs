@@ -67,6 +67,8 @@ fn gen_struct(
 			.make_pub()
 			.body(|fn_body| {
 				let mut s = String::new();
+				// ToDo Ext: for non i64 pk this has to be modified e.g. assert self.pk.is_not_empty()
+				// ToDo: Document assert / panics
 				s.push_str(&format!("assert!(self.{pk} > 0); let rows = "));
 				s.push_str(&gen_query(&tab_name, &pk, &columns));
 				s.push_str("; assert!(rows < 2); Ok(rows == 1)");

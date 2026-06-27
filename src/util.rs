@@ -1,7 +1,7 @@
 use convert_case::{Boundary, Case, Casing};
 use virtue::{
 	prelude::{Error, FromAttribute, Group, Literal, Result},
-	utils::{parse_tagged_attribute, ParsedAttribute},
+	utils::{ParsedAttribute, parse_tagged_attribute},
 };
 
 /// Convert TypeName (Pascal) to table_name (Snake)
@@ -10,10 +10,10 @@ use virtue::{
 pub(crate) fn tab_name(ident: &str) -> String {
 	ident
 		.from_case(Case::Pascal)
-		.without_boundaries(&[
-			Boundary::UPPER_DIGIT,
-			Boundary::DIGIT_LOWER,
-			Boundary::LOWER_DIGIT,
+		.remove_boundaries(&[
+			Boundary::UpperDigit,
+			Boundary::DigitLower,
+			Boundary::LowerDigit,
 		])
 		.to_case(Case::Snake)
 }
@@ -49,7 +49,7 @@ impl FromAttribute for TabAttr {
 		for attr in attributes {
 			match attr {
 				ParsedAttribute::Tag(key) => {
-					return Err(Error::custom_at("unknown table attr", key.span()))
+					return Err(Error::custom_at("unknown table attr", key.span()));
 				}
 				ParsedAttribute::Property(key, val) => match key.to_string().as_str() {
 					"constraint" => tab.constraint = literal_str(val)?,
@@ -78,7 +78,7 @@ impl FromAttribute for ColAttr {
 		for attr in attributes {
 			match attr {
 				ParsedAttribute::Tag(i) => {
-					return Err(Error::custom_at("unknown column attr", i.span()))
+					return Err(Error::custom_at("unknown column attr", i.span()));
 				}
 				ParsedAttribute::Property(key, val) => match key.to_string().as_str() {
 					"typ" => col.typ = literal_str(val)?,
@@ -106,7 +106,7 @@ impl FromAttribute for AsTabAttr {
 		for attr in attributes {
 			match attr {
 				ParsedAttribute::Tag(i) => {
-					return Err(Error::custom_at("unknown table attr", i.span()))
+					return Err(Error::custom_at("unknown table attr", i.span()));
 				}
 				ParsedAttribute::Property(key, val) => match key.to_string().as_str() {
 					"from" => tab.from = literal_str(val)?,
@@ -133,7 +133,7 @@ impl FromAttribute for AsColAttr {
 		for attr in attributes {
 			match attr {
 				ParsedAttribute::Tag(i) => {
-					return Err(Error::custom_at("unknown column attr", i.span()))
+					return Err(Error::custom_at("unknown column attr", i.span()));
 				}
 				ParsedAttribute::Property(key, val) => match key.to_string().as_str() {
 					"col" => col.col = literal_str(val)?,

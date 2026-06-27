@@ -68,6 +68,7 @@ fn gen_struct(
 			.make_pub()
 			.body(|fn_body| {
 				let mut s = String::new();
+				// ToDo: Hier wie bei Update Probleme beheben
 				s.push_str(&format!("assert!(self.{pk} > 0);"));
 				s.push_str(&exec(&tab_name, &pk, &columns));
 				s.push_str("assert!(rows < 2); Ok(rows == 1)");

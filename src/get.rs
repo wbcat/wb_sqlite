@@ -14,6 +14,7 @@ pub(crate) fn inner(input: TokenStream) -> Result<TokenStream> {
 	generator.finish()
 }
 
+// ToDo Ext: Table Constraint UNIQUE could be used to make get_by fn's
 fn gen_struct(
 	generator: &mut Generator,
 	_attributes: Vec<Attribute>,
@@ -69,7 +70,7 @@ fn gen_struct(
 			.body(|fn_body| {
 				let mut s = String::new();
 				if pk_typ == "i64" {
-					s.push_str(&format!("if {pk} < 1 {{Err(sqlx::Error::RowNotFound)}} else {{"));
+					s.push_str(&format!("if {pk} < 1 {{Err(::sqlx::Error::RowNotFound)}} else {{"));
 				}
 				s.push_str(&format!("::sqlx::query_as::<_, Self>(\"SELECT {columns} FROM {tab_name} WHERE {pk}=?\").bind({pk}).fetch_one(exec).await"));
 				if pk_typ == "i64" {
