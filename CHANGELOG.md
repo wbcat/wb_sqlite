@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project adheres to [Semantic Versioning](https://semver.org).
 
+## 0.3.0 - 2026-06-27
+
+- edition 2024
+- IF NOT EXISTS removed from CREATE TABLE, INDEX, TRIGGER
+
 ## 0.2.1 - 2025-05-16
 
 - bump convert_case 0.8.0, sqlx 0.8.5, tokio 1.45.0
