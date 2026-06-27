@@ -19,6 +19,11 @@ use virtue::prelude::TokenStream;
 /// Create index for every column with a [foreign-key-clause](https://www.sqlite.org/syntax/foreign-key-clause.html).\
 /// Works only if constraint is in all caps, lowercase serves as escape hatch.
 ///
+/// Possible breaking change from 0.2.1 to 0.3.0: \
+/// Removed the IF NOT EXISTS part.
+/// This part made failures silent.
+/// We should know about an error and deal with it.
+///
 /// ```rust
 /// # use wb_sqlite::CreateIndexSql;
 /// #[derive(CreateIndexSql)]
@@ -36,8 +41,8 @@ use virtue::prelude::TokenStream;
 /// assert_eq!(
 ///    Cat::CREATE_INDEX_SQL,
 ///    concat!(
-///    "CREATE INDEX IF NOT EXISTS cat_mother_idx ON cat(mother); ",
-///    "CREATE INDEX IF NOT EXISTS cat_owner_idx ON cat(owner); "
+///    "CREATE INDEX cat_mother_idx ON cat(mother); ",
+///    "CREATE INDEX cat_owner_idx ON cat(owner); "
 ///    )
 /// );
 /// ```
@@ -48,8 +53,13 @@ pub fn create_index(input: TokenStream) -> TokenStream {
 
 /// const CREATE_TABLE_SQL: &'static str = "CREATE TABLE ..."
 ///
-/// `"CREATE TABLE IF NOT EXISTS {tab_name} ({col_defs}{tab_constraint}) STRICT{tab_option};"`\
+/// `"CREATE TABLE {tab_name} ({col_defs}{tab_constraint}) STRICT{tab_option};"`\
 /// `col_defs = {field_name} {col_typ} {col_constraint},`
+///
+/// Possible breaking change from 0.2.1 to 0.3.0: \
+/// Removed the IF NOT EXISTS part.
+/// This part made failures silent.
+/// We should know about an error and deal with it.
 ///
 /// ## Struct attributes
 ///
@@ -75,7 +85,7 @@ pub fn create_index(input: TokenStream) -> TokenStream {
 /// # }
 /// # assert_eq!(
 /// # MyDog::CREATE_TABLE_SQL,
-/// "CREATE TABLE IF NOT EXISTS my_dog (name TEXT NOT NULL) STRICT;"
+/// "CREATE TABLE my_dog (name TEXT NOT NULL) STRICT;"
 /// # );
 /// # assert!(rusqlite::Connection::open_in_memory().unwrap().execute_batch(MyDog::CREATE_TABLE_SQL).is_ok());
 ///
@@ -85,7 +95,7 @@ pub fn create_index(input: TokenStream) -> TokenStream {
 /// # }
 /// # assert_eq!(
 /// # M2yDog::CREATE_TABLE_SQL,
-/// "CREATE TABLE IF NOT EXISTS m2y_dog (name TEXT NOT NULL) STRICT;"
+/// "CREATE TABLE m2y_dog (name TEXT NOT NULL) STRICT;"
 /// # );
 /// # assert!(rusqlite::Connection::open_in_memory().unwrap().execute_batch(M2yDog::CREATE_TABLE_SQL).is_ok());
 ///
@@ -95,7 +105,7 @@ pub fn create_index(input: TokenStream) -> TokenStream {
 /// # }
 /// # assert_eq!(
 /// # My2Dog::CREATE_TABLE_SQL,
-/// "CREATE TABLE IF NOT EXISTS my2_dog (name TEXT NOT NULL) STRICT;"
+/// "CREATE TABLE my2_dog (name TEXT NOT NULL) STRICT;"
 /// # );
 /// # assert!(rusqlite::Connection::open_in_memory().unwrap().execute_batch(My2Dog::CREATE_TABLE_SQL).is_ok());
 ///
@@ -105,7 +115,7 @@ pub fn create_index(input: TokenStream) -> TokenStream {
 /// # }
 /// # assert_eq!(
 /// # MyD2og::CREATE_TABLE_SQL,
-/// "CREATE TABLE IF NOT EXISTS my_d2og (name TEXT NOT NULL) STRICT;"
+/// "CREATE TABLE my_d2og (name TEXT NOT NULL) STRICT;"
 /// # );
 /// # assert!(rusqlite::Connection::open_in_memory().unwrap().execute_batch(MyD2og::CREATE_TABLE_SQL).is_ok());
 /// # #[derive(CreateTableSql)]
@@ -115,7 +125,7 @@ pub fn create_index(input: TokenStream) -> TokenStream {
 /// # }
 /// # assert_eq!(
 /// # MyDo2g::CREATE_TABLE_SQL,
-/// "CREATE TABLE IF NOT EXISTS my_do2g (name TEXT NOT NULL) STRICT;"
+/// "CREATE TABLE my_do2g (name TEXT NOT NULL) STRICT;"
 /// # );
 /// # assert!(rusqlite::Connection::open_in_memory().unwrap().execute_batch(MyDo2g::CREATE_TABLE_SQL).is_ok());
 /// ```
@@ -144,7 +154,7 @@ pub fn create_index(input: TokenStream) -> TokenStream {
 /// assert_eq!(
 /// WineBottle::CREATE_TABLE_SQL,
 /// concat!(
-/// "CREATE TABLE IF NOT EXISTS wine_bottle (id INTEGER NOT NULL PRIMARY KEY, ",
+/// "CREATE TABLE wine_bottle (id INTEGER NOT NULL PRIMARY KEY, ",
 /// "serial_no TEXT UNIQUE, ",
 /// "vendor INTEGER NOT NULL REFERENCES vendor(id) ON UPDATE RESTRICT ON DELETE RESTRICT, ",
 /// "volume REAL NOT NULL CHECK(volume > 0), ",
@@ -185,11 +195,11 @@ pub fn create_table(input: TokenStream) -> TokenStream {
 /// assert_eq!(
 ///    FavoritePet::CREATE_TABLE_LOG_SQL,
 ///    concat!(
-///    "CREATE TABLE IF NOT EXISTS favorite_pet_log (id INTEGER NOT NULL, name TEXT NOT NULL) STRICT; ",
-///    "CREATE INDEX IF NOT EXISTS favorite_pet_log_id_idx ON favorite_pet_log(id); ",
-///    "CREATE TRIGGER IF NOT EXISTS favorite_pet_update UPDATE ON favorite_pet ",
+///    "CREATE TABLE favorite_pet_log (id INTEGER NOT NULL, name TEXT NOT NULL) STRICT; ",
+///    "CREATE INDEX favorite_pet_log_id_idx ON favorite_pet_log(id); ",
+///    "CREATE TRIGGER favorite_pet_update UPDATE ON favorite_pet ",
 ///    "BEGIN INSERT INTO favorite_pet_log (id,name) VALUES (OLD.id,OLD.name); END; ",
-///    "CREATE TRIGGER IF NOT EXISTS favorite_pet_delete DELETE ON favorite_pet ",
+///    "CREATE TRIGGER favorite_pet_delete DELETE ON favorite_pet ",
 ///    "BEGIN INSERT INTO favorite_pet_log (id,name) VALUES (OLD.id,OLD.name); END;"
 ///    )
 /// );

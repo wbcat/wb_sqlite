@@ -25,7 +25,7 @@ struct Dog {
 }
 assert_eq!(
 	Dog::CREATE_TABLE_SQL,
-	"CREATE TABLE IF NOT EXISTS dog (name TEXT NOT NULL) STRICT;"
+	"CREATE TABLE dog (name TEXT NOT NULL) STRICT;"
 );
 assert!(rusqlite::Connection::open_in_memory().unwrap()
 	.execute_batch(Dog::CREATE_TABLE_SQL).is_ok())
@@ -42,7 +42,7 @@ struct Cat {
 assert_eq!(
 	Cat::CREATE_TABLE_SQL,
 	concat!(
-	"CREATE TABLE IF NOT EXISTS cat ",
+	"CREATE TABLE cat ",
 	"(name TEXT NOT NULL UNIQUE, weight REAL) STRICT;"
 	)
 );
@@ -65,7 +65,7 @@ struct Human {
 assert_eq!(
 	Human::CREATE_TABLE_SQL,
 	concat!(
-	"CREATE TABLE IF NOT EXISTS human (",
+	"CREATE TABLE human (",
 	"id INTEGER NOT NULL PRIMARY KEY, ",
 	"name TEXT NOT NULL CHECK(name != ''), ",
 	"image BLOB, data ANY) STRICT;"
@@ -89,7 +89,7 @@ struct Pet {
 assert_eq!(
 	Pet::CREATE_TABLE_SQL,
 	concat!(
-	"CREATE TABLE IF NOT EXISTS pet (id INTEGER NOT NULL PRIMARY KEY, ",
+	"CREATE TABLE pet (id INTEGER NOT NULL PRIMARY KEY, ",
 	"owner INTEGER NOT NULL REFERENCES human(id) ON UPDATE RESTRICT ON DELETE RESTRICT, ",
 	"name TEXT NOT NULL, UNIQUE(owner,name)) STRICT;"
 	)

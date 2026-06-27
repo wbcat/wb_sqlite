@@ -51,9 +51,8 @@ fn gen_struct(
 			col_defs.push_str(&col_attr.typ);
 		}
 		if col_attr.constraint.starts_with("PRIMARY KEY") {
-			create_index = format!(
-				"CREATE INDEX IF NOT EXISTS {tab_log_name}_{col_name}_idx ON {tab_log_name}({col_name}); "
-			);
+			create_index =
+				format!("CREATE INDEX {tab_log_name}_{col_name}_idx ON {tab_log_name}({col_name}); ");
 		}
 	}
 
@@ -64,7 +63,7 @@ fn gen_struct(
 		.make_pub()
 		.with_value(|b| {
 			b.push_parsed(format!(
-				"\"CREATE TABLE IF NOT EXISTS {tab_log_name} ({col_defs}) STRICT; {create_index}CREATE TRIGGER IF NOT EXISTS {tab_name}_update UPDATE ON {tab_name} BEGIN INSERT INTO {tab_log_name} ({columns}) VALUES ({log_values}); END; CREATE TRIGGER IF NOT EXISTS {tab_name}_delete DELETE ON {tab_name} BEGIN INSERT INTO {tab_log_name} ({columns}) VALUES ({log_values}); END;\""
+				"\"CREATE TABLE {tab_log_name} ({col_defs}) STRICT; {create_index}CREATE TRIGGER {tab_name}_update UPDATE ON {tab_name} BEGIN INSERT INTO {tab_log_name} ({columns}) VALUES ({log_values}); END; CREATE TRIGGER {tab_name}_delete DELETE ON {tab_name} BEGIN INSERT INTO {tab_log_name} ({columns}) VALUES ({log_values}); END;\""
 			))?;
 			Ok(())
 		})?;

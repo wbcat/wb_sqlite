@@ -29,12 +29,12 @@ fn gen_struct(
 	let tab_constraint = if tab_attr.constraint.is_empty() {
 		String::new()
 	} else {
-		format!(", {}", &tab_attr.constraint)
+		format!(", {}", tab_attr.constraint)
 	};
 	let tab_option = if tab_attr.option.is_empty() {
 		String::new()
 	} else {
-		format!(", {}", &tab_attr.option)
+		format!(", {}", tab_attr.option)
 	};
 
 	let mut col_defs = String::new();
@@ -66,8 +66,8 @@ fn gen_struct(
 			.make_pub()
 			.with_value(|b| {
 				b.push_parsed(format!(
-				"\"CREATE TABLE IF NOT EXISTS {tab_name} ({col_defs}{tab_constraint}) STRICT{tab_option};\""
-			))?;
+					"\"CREATE TABLE {tab_name} ({col_defs}{tab_constraint}) STRICT{tab_option};\""
+				))?;
 				Ok(())
 			})?;
 	}

@@ -54,7 +54,9 @@ fn gen_struct(
 	values_full.pop();
 
 	fn stmt(tab_name: &str, columns: &str, values: &str) -> String {
-		format!("let mut stmt = conn.prepare_cached(\"INSERT INTO {tab_name} ({columns}) VALUES ({values})\")?;")
+		format!(
+			"let mut stmt = conn.prepare_cached(\"INSERT INTO {tab_name} ({columns}) VALUES ({values})\")?;"
+		)
 	}
 
 	fn insert(columns: &str) -> String {
@@ -88,7 +90,9 @@ fn gen_struct(
 					s.push_str(" } else { ");
 					if columns.is_empty() {
 						// the table has only the pk column
-						s.push_str(&format!("let mut stmt = conn.prepare_cached(\"INSERT INTO {tab_name} VALUES (NULL)\")?;"));
+						s.push_str(&format!(
+							"let mut stmt = conn.prepare_cached(\"INSERT INTO {tab_name} VALUES (NULL)\")?;"
+						));
 						s.push_str("stmt.insert(())?");
 					} else {
 						s.push_str(&stmt(&tab_name, &columns, &values));

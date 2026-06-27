@@ -118,38 +118,38 @@ fn create() -> Result<(), rusqlite::Error> {
 
 	eq(
 		Single::CREATE_TABLE_SQL,
-		"CREATE TABLE IF NOT EXISTS single (id INTEGER NOT NULL) STRICT;",
+		"CREATE TABLE single (id INTEGER NOT NULL) STRICT;",
 	);
 	eq(Single::SELECT_SQL, "SELECT id FROM single");
 	eq(
 		SinglePk::CREATE_TABLE_SQL,
-		"CREATE TABLE IF NOT EXISTS single_pk (id INTEGER NOT NULL PRIMARY KEY) STRICT;",
+		"CREATE TABLE single_pk (id INTEGER NOT NULL PRIMARY KEY) STRICT;",
 	);
 	eq(SinglePk::SELECT_SQL, "SELECT id FROM single_pk");
 	eq(
 		Double::CREATE_TABLE_SQL,
-		"CREATE TABLE IF NOT EXISTS double (id INTEGER NOT NULL PRIMARY KEY, num INTEGER NOT NULL) STRICT;"
+		"CREATE TABLE double (id INTEGER NOT NULL PRIMARY KEY, num INTEGER NOT NULL) STRICT;",
 	);
 	eq(Double::SELECT_SQL, "SELECT id,num FROM double");
 	eq(
 		Record::CREATE_TABLE_SQL,
-		"CREATE TABLE IF NOT EXISTS record (id INTEGER NOT NULL PRIMARY KEY, fk INTEGER NOT NULL REFERENCES single_pk(id), name TEXT NOT NULL UNIQUE, ok INTEGER NOT NULL CHECK (ok IN (0,1)), pos INTEGER NOT NULL CHECK (pos >= 0), num INTEGER NOT NULL, sci_val REAL NOT NULL, note TEXT NOT NULL, data BLOB NOT NULL, opt_ok INTEGER, opt_pos INTEGER, opt_num INTEGER, opt_sci_val REAL, opt_note TEXT, opt_data BLOB, any_data ANY) STRICT;"
+		"CREATE TABLE record (id INTEGER NOT NULL PRIMARY KEY, fk INTEGER NOT NULL REFERENCES single_pk(id), name TEXT NOT NULL UNIQUE, ok INTEGER NOT NULL CHECK (ok IN (0,1)), pos INTEGER NOT NULL CHECK (pos >= 0), num INTEGER NOT NULL, sci_val REAL NOT NULL, note TEXT NOT NULL, data BLOB NOT NULL, opt_ok INTEGER, opt_pos INTEGER, opt_num INTEGER, opt_sci_val REAL, opt_note TEXT, opt_data BLOB, any_data ANY) STRICT;",
 	);
 	eq(
 		Record::CREATE_INDEX_SQL,
-		"CREATE INDEX IF NOT EXISTS record_fk_idx ON record(fk); ",
+		"CREATE INDEX record_fk_idx ON record(fk); ",
 	);
 	eq(
 		Record::CREATE_TABLE_LOG_SQL,
-		"CREATE TABLE IF NOT EXISTS record_log (id INTEGER NOT NULL, fk INTEGER NOT NULL, name TEXT NOT NULL, ok INTEGER NOT NULL, pos INTEGER NOT NULL, num INTEGER NOT NULL, sci_val REAL NOT NULL, note TEXT NOT NULL, data BLOB NOT NULL, opt_ok INTEGER, opt_pos INTEGER, opt_num INTEGER, opt_sci_val REAL, opt_note TEXT, opt_data BLOB, any_data ANY) STRICT; CREATE INDEX IF NOT EXISTS record_log_id_idx ON record_log(id); CREATE TRIGGER IF NOT EXISTS record_update UPDATE ON record BEGIN INSERT INTO record_log (id,fk,name,ok,pos,num,sci_val,note,data,opt_ok,opt_pos,opt_num,opt_sci_val,opt_note,opt_data,any_data) VALUES (OLD.id,OLD.fk,OLD.name,OLD.ok,OLD.pos,OLD.num,OLD.sci_val,OLD.note,OLD.data,OLD.opt_ok,OLD.opt_pos,OLD.opt_num,OLD.opt_sci_val,OLD.opt_note,OLD.opt_data,OLD.any_data); END; CREATE TRIGGER IF NOT EXISTS record_delete DELETE ON record BEGIN INSERT INTO record_log (id,fk,name,ok,pos,num,sci_val,note,data,opt_ok,opt_pos,opt_num,opt_sci_val,opt_note,opt_data,any_data) VALUES (OLD.id,OLD.fk,OLD.name,OLD.ok,OLD.pos,OLD.num,OLD.sci_val,OLD.note,OLD.data,OLD.opt_ok,OLD.opt_pos,OLD.opt_num,OLD.opt_sci_val,OLD.opt_note,OLD.opt_data,OLD.any_data); END;"
+		"CREATE TABLE record_log (id INTEGER NOT NULL, fk INTEGER NOT NULL, name TEXT NOT NULL, ok INTEGER NOT NULL, pos INTEGER NOT NULL, num INTEGER NOT NULL, sci_val REAL NOT NULL, note TEXT NOT NULL, data BLOB NOT NULL, opt_ok INTEGER, opt_pos INTEGER, opt_num INTEGER, opt_sci_val REAL, opt_note TEXT, opt_data BLOB, any_data ANY) STRICT; CREATE INDEX record_log_id_idx ON record_log(id); CREATE TRIGGER record_update UPDATE ON record BEGIN INSERT INTO record_log (id,fk,name,ok,pos,num,sci_val,note,data,opt_ok,opt_pos,opt_num,opt_sci_val,opt_note,opt_data,any_data) VALUES (OLD.id,OLD.fk,OLD.name,OLD.ok,OLD.pos,OLD.num,OLD.sci_val,OLD.note,OLD.data,OLD.opt_ok,OLD.opt_pos,OLD.opt_num,OLD.opt_sci_val,OLD.opt_note,OLD.opt_data,OLD.any_data); END; CREATE TRIGGER record_delete DELETE ON record BEGIN INSERT INTO record_log (id,fk,name,ok,pos,num,sci_val,note,data,opt_ok,opt_pos,opt_num,opt_sci_val,opt_note,opt_data,any_data) VALUES (OLD.id,OLD.fk,OLD.name,OLD.ok,OLD.pos,OLD.num,OLD.sci_val,OLD.note,OLD.data,OLD.opt_ok,OLD.opt_pos,OLD.opt_num,OLD.opt_sci_val,OLD.opt_note,OLD.opt_data,OLD.any_data); END;",
 	);
 	eq(
 		Record::SELECT_SQL,
-		"SELECT id,fk,name,ok,pos,num,sci_val,note,data,opt_ok,opt_pos,opt_num,opt_sci_val,opt_note,opt_data,any_data FROM record"
+		"SELECT id,fk,name,ok,pos,num,sci_val,note,data,opt_ok,opt_pos,opt_num,opt_sci_val,opt_note,opt_data,any_data FROM record",
 	);
 	eq(
 		MapRecord::CREATE_TABLE_SQL,
-		"CREATE TABLE IF NOT EXISTS map_record (id INTEGER NOT NULL PRIMARY KEY, name TEXT NOT NULL, val REAL NOT NULL, note TEXT NOT NULL) STRICT;"
+		"CREATE TABLE map_record (id INTEGER NOT NULL PRIMARY KEY, name TEXT NOT NULL, val REAL NOT NULL, note TEXT NOT NULL) STRICT;",
 	);
 	eq(
 		MapRecord::SELECT_SQL,
@@ -157,15 +157,15 @@ fn create() -> Result<(), rusqlite::Error> {
 	);
 	eq(
 		MapRecord::SELECT_AS_SQL,
-		"SELECT 0 AS id,name,num * sci_val AS val,concat(name,'; note: ',note) AS note FROM record where id < 3 order by id desc"
+		"SELECT 0 AS id,name,num * sci_val AS val,concat(name,'; note: ',note) AS note FROM record where id < 3 order by id desc",
 	);
 	eq(
 		NtoMrel::CREATE_TABLE_SQL,
-		"CREATE TABLE IF NOT EXISTS nto_mrel (n INTEGER NOT NULL REFERENCES record(id) ON UPDATE RESTRICT ON DELETE RESTRICT, m INTEGER NOT NULL REFERENCES map_record(id) ON UPDATE RESTRICT ON DELETE RESTRICT) STRICT;"
+		"CREATE TABLE nto_mrel (n INTEGER NOT NULL REFERENCES record(id) ON UPDATE RESTRICT ON DELETE RESTRICT, m INTEGER NOT NULL REFERENCES map_record(id) ON UPDATE RESTRICT ON DELETE RESTRICT) STRICT;",
 	);
 	eq(
 		NtoMrel::CREATE_INDEX_SQL,
-		"CREATE INDEX IF NOT EXISTS nto_mrel_n_idx ON nto_mrel(n); CREATE INDEX IF NOT EXISTS nto_mrel_m_idx ON nto_mrel(m); "
+		"CREATE INDEX nto_mrel_n_idx ON nto_mrel(n); CREATE INDEX nto_mrel_m_idx ON nto_mrel(m); ",
 	);
 	eq(NtoMrel::SELECT_SQL, "SELECT n,m FROM nto_mrel");
 
