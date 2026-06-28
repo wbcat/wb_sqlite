@@ -1,4 +1,5 @@
 # wb_sqlite
+
 SQLite derive macros.\
 Map Rust struct / field to SQLite table / column.\
 Generate const + fn (async sqlx / sync rusqlite).
