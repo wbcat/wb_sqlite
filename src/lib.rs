@@ -41,8 +41,8 @@ use virtue::prelude::TokenStream;
 /// assert_eq!(
 ///    Cat::CREATE_INDEX_SQL,
 ///    concat!(
-///    "CREATE INDEX cat_mother_idx ON cat(mother); ",
-///    "CREATE INDEX cat_owner_idx ON cat(owner); "
+///    "CREATE INDEX cat_mother_idx ON cat(mother);",
+///    "CREATE INDEX cat_owner_idx ON cat(owner);"
 ///    )
 /// );
 /// ```
@@ -195,10 +195,10 @@ pub fn create_table(input: TokenStream) -> TokenStream {
 /// assert_eq!(
 ///    FavoritePet::CREATE_TABLE_LOG_SQL,
 ///    concat!(
-///    "CREATE TABLE favorite_pet_log (id INTEGER NOT NULL, name TEXT NOT NULL) STRICT; ",
-///    "CREATE INDEX favorite_pet_log_id_idx ON favorite_pet_log(id); ",
+///    "CREATE TABLE favorite_pet_log (id INTEGER NOT NULL, name TEXT NOT NULL) STRICT;",
+///    "CREATE INDEX favorite_pet_log_id_idx ON favorite_pet_log(id);",
 ///    "CREATE TRIGGER favorite_pet_update UPDATE ON favorite_pet ",
-///    "BEGIN INSERT INTO favorite_pet_log (id,name) VALUES (OLD.id,OLD.name); END; ",
+///    "BEGIN INSERT INTO favorite_pet_log (id,name) VALUES (OLD.id,OLD.name); END;",
 ///    "CREATE TRIGGER favorite_pet_delete DELETE ON favorite_pet ",
 ///    "BEGIN INSERT INTO favorite_pet_log (id,name) VALUES (OLD.id,OLD.name); END;"
 ///    )
@@ -253,7 +253,7 @@ pub fn select(input: TokenStream) -> TokenStream {
 /// ```rust
 /// # use wb_sqlite::SelectAsSql;
 /// #[derive(SelectAsSql)]
-/// #[sqlas(from = "old_table1 AS t1 INNER JOIN old_table2 AS t2 on t1.pk = t2.fk")]
+/// #[sqlas(from = "old_table1 AS t1 INNER JOIN old_table2 AS t2 ON t1.pk = t2.fk")]
 /// struct NewTable {
 ///    id: i64,
 ///    #[sqlas(col = "t1.moniker")]
@@ -269,7 +269,7 @@ pub fn select(input: TokenStream) -> TokenStream {
 ///    concat!(
 ///    "SELECT id,t1.moniker AS name,t2.description AS info,note,",
 ///    "t1.pressure_psi * 0.068947573 AS pressure_bar FROM ",
-///    "old_table1 AS t1 INNER JOIN old_table2 AS t2 on t1.pk = t2.fk"
+///    "old_table1 AS t1 INNER JOIN old_table2 AS t2 ON t1.pk = t2.fk"
 ///    )
 /// );
 /// ```

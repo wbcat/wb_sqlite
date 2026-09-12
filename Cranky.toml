@@ -1,4 +1,4 @@
-# Rust 1.95
+# Rust 1.98
 # https://crates.io/crates/cargo-cranky
 # https://doc.rust-lang.org/rustc/lints/listing/allowed-by-default.html
 # https://rust-lang.github.io/rust-clippy/master/
@@ -7,6 +7,7 @@ warn = [
   # rustc
   "ambiguous_negative_literals",
   "closure_returning_async_block",
+  "dead_code_pub_in_binary",
   "explicit_outlives_requirements",
   "ffi_unwind_calls",
   "impl_trait_overcaptures",
@@ -75,7 +76,6 @@ warn = [
   "clippy::float_cmp_const",
   "clippy::fn_params_excessive_bools",
   "clippy::fn_to_numeric_cast_any",
-  "clippy::from_iter_instead_of_collect",
   "clippy::get_unwrap",
   "clippy::if_not_else",
   "clippy::if_then_some_else_none",
@@ -215,5 +215,6 @@ warn = [
   "clippy::while_float",
   "clippy::wildcard_dependencies",
   "clippy::wildcard_imports",
+  "clippy::with_capacity_zero",
   "clippy::zero_sized_map_values",
 ]

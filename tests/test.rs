@@ -137,11 +137,11 @@ fn create() -> Result<(), rusqlite::Error> {
 	);
 	eq(
 		Record::CREATE_INDEX_SQL,
-		"CREATE INDEX record_fk_idx ON record(fk); ",
+		"CREATE INDEX record_fk_idx ON record(fk);",
 	);
 	eq(
 		Record::CREATE_TABLE_LOG_SQL,
-		"CREATE TABLE record_log (id INTEGER NOT NULL, fk INTEGER NOT NULL, name TEXT NOT NULL, ok INTEGER NOT NULL, pos INTEGER NOT NULL, num INTEGER NOT NULL, sci_val REAL NOT NULL, note TEXT NOT NULL, data BLOB NOT NULL, opt_ok INTEGER, opt_pos INTEGER, opt_num INTEGER, opt_sci_val REAL, opt_note TEXT, opt_data BLOB, any_data ANY) STRICT; CREATE INDEX record_log_id_idx ON record_log(id); CREATE TRIGGER record_update UPDATE ON record BEGIN INSERT INTO record_log (id,fk,name,ok,pos,num,sci_val,note,data,opt_ok,opt_pos,opt_num,opt_sci_val,opt_note,opt_data,any_data) VALUES (OLD.id,OLD.fk,OLD.name,OLD.ok,OLD.pos,OLD.num,OLD.sci_val,OLD.note,OLD.data,OLD.opt_ok,OLD.opt_pos,OLD.opt_num,OLD.opt_sci_val,OLD.opt_note,OLD.opt_data,OLD.any_data); END; CREATE TRIGGER record_delete DELETE ON record BEGIN INSERT INTO record_log (id,fk,name,ok,pos,num,sci_val,note,data,opt_ok,opt_pos,opt_num,opt_sci_val,opt_note,opt_data,any_data) VALUES (OLD.id,OLD.fk,OLD.name,OLD.ok,OLD.pos,OLD.num,OLD.sci_val,OLD.note,OLD.data,OLD.opt_ok,OLD.opt_pos,OLD.opt_num,OLD.opt_sci_val,OLD.opt_note,OLD.opt_data,OLD.any_data); END;",
+		"CREATE TABLE record_log (id INTEGER NOT NULL, fk INTEGER NOT NULL, name TEXT NOT NULL, ok INTEGER NOT NULL, pos INTEGER NOT NULL, num INTEGER NOT NULL, sci_val REAL NOT NULL, note TEXT NOT NULL, data BLOB NOT NULL, opt_ok INTEGER, opt_pos INTEGER, opt_num INTEGER, opt_sci_val REAL, opt_note TEXT, opt_data BLOB, any_data ANY) STRICT;CREATE INDEX record_log_id_idx ON record_log(id);CREATE TRIGGER record_update UPDATE ON record BEGIN INSERT INTO record_log (id,fk,name,ok,pos,num,sci_val,note,data,opt_ok,opt_pos,opt_num,opt_sci_val,opt_note,opt_data,any_data) VALUES (OLD.id,OLD.fk,OLD.name,OLD.ok,OLD.pos,OLD.num,OLD.sci_val,OLD.note,OLD.data,OLD.opt_ok,OLD.opt_pos,OLD.opt_num,OLD.opt_sci_val,OLD.opt_note,OLD.opt_data,OLD.any_data); END;CREATE TRIGGER record_delete DELETE ON record BEGIN INSERT INTO record_log (id,fk,name,ok,pos,num,sci_val,note,data,opt_ok,opt_pos,opt_num,opt_sci_val,opt_note,opt_data,any_data) VALUES (OLD.id,OLD.fk,OLD.name,OLD.ok,OLD.pos,OLD.num,OLD.sci_val,OLD.note,OLD.data,OLD.opt_ok,OLD.opt_pos,OLD.opt_num,OLD.opt_sci_val,OLD.opt_note,OLD.opt_data,OLD.any_data); END;",
 	);
 	eq(
 		Record::SELECT_SQL,
@@ -165,7 +165,7 @@ fn create() -> Result<(), rusqlite::Error> {
 	);
 	eq(
 		NtoMrel::CREATE_INDEX_SQL,
-		"CREATE INDEX nto_mrel_n_idx ON nto_mrel(n); CREATE INDEX nto_mrel_m_idx ON nto_mrel(m); ",
+		"CREATE INDEX nto_mrel_n_idx ON nto_mrel(n);CREATE INDEX nto_mrel_m_idx ON nto_mrel(m);",
 	);
 	eq(NtoMrel::SELECT_SQL, "SELECT n,m FROM nto_mrel");
 
